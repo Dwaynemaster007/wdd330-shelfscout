@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShelfScout — Discover Your Next Read</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="/index.html">ShelfScout</a>
+      <form class="search-form" id="search-form" role="search" action="/index.html" method="get">
+        <label class="visually-hidden" for="search-input">Search books</label>
+        <input
+          type="search"
+          id="search-input"
+          name="q"
+          placeholder="Search books, authors, subjects…"
+          autocomplete="off"
+        />
+        <button type="submit">Search</button>
+      </form>
+      <nav class="site-nav">
+        <a href="/list.html">My List</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <h1>Discover your next read</h1>
+        <p>Search millions of books, save them to your reading list, and explore by subject.</p>
+      </section>
+
+      <section class="results" aria-live="polite">
+        <h2 class="results-title">Featured picks</h2>
+        <p class="results-status" id="results-status">Use the search bar to find books.</p>
+        <ul class="book-grid" id="book-grid"></ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>ShelfScout · WDD 330 · Data from Open Library &amp; Google Books</p>
+    </footer>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>
