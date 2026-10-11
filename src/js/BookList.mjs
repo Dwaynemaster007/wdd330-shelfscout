@@ -1,7 +1,6 @@
 /**
  * BookList — render a grid of book cards from normalized search results
  */
-
 import { coverUrl } from "./ExternalServices.mjs";
 
 const PLACEHOLDER_COVER =
@@ -13,22 +12,29 @@ const PLACEHOLDER_COVER =
     </svg>`
   );
 
-function bookCardTemplate(book) {
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function bookCardTemplate(book, index = 0) {
   const authors = (book.authors || []).slice(0, 2).join(", ") || "Unknown author";
   const year = book.firstPublishYear ? ` · ${book.firstPublishYear}` : "";
   const cover =
-    book.coverMedium ||
-    coverUrl(book.coverId, "M") ||
-    PLACEHOLDER_COVER;
+    book.coverMedium || coverUrl(book.coverId, "M") || PLACEHOLDER_COVER;
   const detailHref = `/detail.html?work=${encodeURIComponent(book.workId || book.key || "")}`;
+  const delay = Math.min(index, 12) * 40;
 
   return `
-    <li class="book-card">
+    <li class="book-card book-card--enter" style="animation-delay:${delay}ms">
       <a href="${detailHref}">
         <img
           class="book-card__cover"
           src="${cover}"
-          alt="Cover of ${escapeAttr(book.title)}"
+          alt="Cover of ${escapeHtml(book.title)}"
           loading="lazy"
           onerror="this.onerror=null;this.src='${PLACEHOLDER_COVER}'"
         />
@@ -39,38 +45,48 @@ function bookCardTemplate(book) {
   `;
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
-
-function escapeAttr(str) {
-  return escapeHtml(str).replaceAll("'", "&#39;");
-}
-
 export default class BookList {
   constructor(listElement) {
     this.listElement = listElement;
+    this.lastBooks = [];
   }
 
-  /**
-   * @param {object[]} books — normalized book objects from ExternalServices
-   */
   render(books) {
     if (!this.listElement) return;
-
+    this.lastBooks = books || [];
     if (!books || books.length === 0) {
       this.listElement.innerHTML = "";
       return;
     }
+    this.listElement.innerHTML = books.map((b, i) => bookCardTemplate(b, i)).join("");
+  }
 
-    this.listElement.innerHTML = books.map(bookCardTemplate).join("");
+  /** Client-side filter of the last rendered set */
+  filter({ yearMin, yearMax, subject } = {}) {
+    let books = [...this.lastBooks];
+    if (yearMin) {
+      books = books.filter(
+        (b) => b.firstPublishYear && b.firstPublishYear >= Number(yearMin)
+      );
+    }
+    if (yearMax) {
+      books = books.filter(
+        (b) => b.firstPublishYear && b.firstPublishYear <= Number(yearMax)
+      );
+    }
+    if (subject) {
+      const s = subject.toLowerCase();
+      books = books.filter((b) =>
+        (b.subjects || []).some((sub) => String(sub).toLowerCase().includes(s))
+      );
+    }
+    if (!this.listElement) return books;
+    this.listElement.innerHTML = books.map((b, i) => bookCardTemplate(b, i)).join("");
+    return books;
   }
 
   clear() {
+    this.lastBooks = [];
     if (this.listElement) this.listElement.innerHTML = "";
   }
 }

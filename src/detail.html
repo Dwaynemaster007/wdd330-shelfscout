@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Book details on ShelfScout with Open Library and Google Books data." />
     <title>Book Detail | ShelfScout</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -10,15 +11,16 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
       <a class="logo" href="/index.html">ShelfScout</a>
-      <nav class="site-nav">
+      <nav class="site-nav" aria-label="Primary">
         <a href="/index.html">← Back to search</a>
         <a href="/list.html">My List</a>
       </nav>
     </header>
 
-    <main class="container">
+    <main class="container" id="main-content">
       <article id="book-detail" class="book-detail">
         <p>Loading book details…</p>
       </article>

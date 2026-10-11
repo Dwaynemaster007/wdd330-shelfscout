@@ -33,17 +33,37 @@ export function escapeHtml(str) {
     .replaceAll('"', "&quot;");
 }
 
-/** Dismissible status banner at top of main */
+/**
+ * Dismissible status banner.
+ * @param {string} message
+ * @param {"success"|"error"|"info"} [type]
+ */
 export function alertMessage(message, type = "success") {
   const main = qs("main") || document.body;
-  const existing = qs(".alert");
-  if (existing) existing.remove();
+  qs(".alert")?.remove();
 
   const el = document.createElement("div");
   el.className = `alert alert--${type}`;
-  el.setAttribute("role", "status");
-  el.innerHTML = `<span>${escapeHtml(message)}</span><button type="button" class="alert__close" aria-label="Dismiss">×</button>`;
+  el.setAttribute("role", type === "error" ? "alert" : "status");
+  el.innerHTML = `<span>${escapeHtml(message)}</span>
+    <button type="button" class="alert__close" aria-label="Dismiss notification">×</button>`;
   el.querySelector(".alert__close").addEventListener("click", () => el.remove());
   main.prepend(el);
-  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  if (type === "error") {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Auto-dismiss success after 4s
+  if (type === "success") {
+    setTimeout(() => el.remove(), 4000);
+  }
+}
+
+/** Update header list count badge if present */
+export function updateListBadge(count) {
+  const badge = qs("#list-count");
+  if (!badge) return;
+  badge.textContent = String(count);
+  badge.hidden = count === 0;
 }

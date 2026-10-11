@@ -1,12 +1,13 @@
 import ExternalServices from "./ExternalServices.mjs";
 import BookDetails from "./BookDetails.mjs";
 import ReadingList from "./ReadingList.mjs";
-import { qs, getParam } from "./utils.mjs";
+import { qs, getParam, updateListBadge } from "./utils.mjs";
 
 const workId = getParam("work");
 const root = qs("#book-detail");
 const services = new ExternalServices();
 const readingList = new ReadingList();
+updateListBadge(readingList.count());
 const details = new BookDetails(root, readingList);
 
 async function init() {

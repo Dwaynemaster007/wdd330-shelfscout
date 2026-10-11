@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Your ShelfScout reading list — want to read, reading, and finished books." />
     <title>My Reading List | ShelfScout</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -10,16 +11,44 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
       <a class="logo" href="/index.html">ShelfScout</a>
-      <nav class="site-nav">
+      <nav class="site-nav" aria-label="Primary">
         <a href="/index.html">Search</a>
+        <a href="/list.html" aria-current="page">My List <span id="list-count" class="badge" hidden>0</span></a>
       </nav>
     </header>
 
-    <main class="container">
+    <main class="container" id="main-content">
       <h1>My Reading List</h1>
       <p id="list-status">Your saved books will appear here.</p>
+
+      <div class="list-toolbar" role="group" aria-label="Sort and filter list">
+        <label>
+          Sort by
+          <select id="sort-by">
+            <option value="date">Date added</option>
+            <option value="title">Title</option>
+            <option value="status">Status</option>
+            <option value="favorite">Favorites first</option>
+          </select>
+        </label>
+        <label>
+          Status
+          <select id="filter-status">
+            <option value="">All</option>
+            <option value="want">Want to Read</option>
+            <option value="reading">Reading</option>
+            <option value="finished">Finished</option>
+          </select>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="favorites-only" />
+          Favorites only
+        </label>
+      </div>
+
       <ul class="book-grid" id="reading-list"></ul>
     </main>
 
